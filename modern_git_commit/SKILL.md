@@ -15,7 +15,10 @@ Strictly follow these steps to complete the task:
 2. **Security Audit:** Carefully inspect the diffs for any accidentally staged secrets, API keys, credentials, or sensitive environmental variables. If any are detected, immediately abort the process and alert the user in Korean.
 3. **Draft Message:** Create a commit message strictly adhering to the Conventional Commits specification.
    - Subject line: `<type>(<optional scope>): <description>` (max 50 characters, imperative mood).
-   - Body: Explain *why* the change was made and *how* it addresses the issue, wrapping text at 72 characters.
+   - Body: Explain *why* the change was made and *how* it addresses the issue.
+     - Format the body as a bulleted list using `-` for each point.
+     - Ensure there is exactly ONE empty line ONLY between the Subject line and the start of the bullet list.
+     - Ensure there are NO empty lines between the bullet list items.
 4. **Execute:** Execute the commit using the drafted message. Use `git commit -m "..." -m "..."` or pass a temporary file, ensuring formatting is preserved. 
 
 ## 3. Constraints & Rules
