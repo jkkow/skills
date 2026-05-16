@@ -12,12 +12,13 @@ description: "Use this skill when a project generates rawdata, CSV, spectra, plo
 ## 2. Instructions
 Strictly follow these steps to complete the task:
 1. **Analyze:** Inspect the current repository to identify generated artifact files such as rawdata, CSV, TXT, DAT, NPY, NPZ, PNG, JPG, JPEG, SVG, PDF, or other experiment output files. Distinguish generated outputs from source code, config files, documentation, and checked-in assets that should remain in the repository.
-2. **Execute:** Verify that the destination directory `C:\Users\jkkow\Dropbox\Obsidian\jkko_notes\zMisc\rawdata_scripts` exists. If the user did not specify an exact selection, present the candidate files to move and ask for confirmation when there is ambiguity. When the intended files are clear, move them into a sensible subfolder structure under the destination directory, preserving filenames unless a collision requires a timestamped rename.
+2. **Execute:** Verify that the destination directory `C:\Users\jkkow\Dropbox\Obsidian\jkko_notes\zMisc\rawdata_scripts` exists. If the user did not specify an exact selection, present the candidate files to move and ask for confirmation when there is ambiguity. When the intended files are clear, move them directly into the destination directory itself without creating any subfolder structure, preserving filenames unless a collision requires a timestamped rename.
 3. **Review:** Confirm which files were moved, list their final absolute paths, and report any files intentionally left behind, skipped because of ambiguity, or renamed to avoid collisions.
 
 ## 3. Constraints & Rules
 - **Do:** Verify source files and the destination path before moving anything.
 - **Do:** Prefer moving only generated artifacts and keep source code, scripts, notebooks, and repo metadata in place unless the user explicitly requests otherwise.
+- **Do:** Move approved files directly into `C:\Users\jkkow\Dropbox\Obsidian\jkko_notes\zMisc\rawdata_scripts` and do not create project-specific or date-based subfolders unless the user explicitly requests them.
 - **Do:** Ask one short clarification question if it is not clear which files are generated outputs.
 - **Do:** Use non-destructive conflict handling such as timestamped renaming instead of overwriting existing files.
 - **Don't:** Delete files after a failed move or use destructive commands that may lose data.
