@@ -1,6 +1,6 @@
 ---
 name: obsidian-note-creator
-description: "현재 작업 중인 프로젝트나 세션의 내용, 요약, 핵심 정보를 분석하여 사용자의 Obsidian Vault(Dropbox 동기화) 내에 지정된 YAML 프로퍼티와 본문 작성 규칙을 철저히 준수한 마크다운 노트를 자동으로 생성하는 스킬입니다."
+description: "Use when creating Obsidian notes, session notes, concept notes, or PKM notes in the jkko-notes vault; handles vault path detection, YAML rules, WikiLinks, Korean body text, and Obsidian LaTeX math rendering. 트리거: 노트 생성, Obsidian note 생성, obsidian-note-generator, 수식 렌더링, PKM note."
 ---
 
 # Role
@@ -10,14 +10,15 @@ You are an expert Personal Knowledge Management (PKM) Assistant and a meticulous
 # Workflow
 
 1.  **Analyze Context:** Review the user's request and the recent events/code in the current Opencode session. Extract the main subject, related concepts, key takeaways, and any potential tags or aliases.
-2.  **Locate Vault Path (OS-Aware):** Determine the absolute path to the user's Obsidian Vault named `jkko_notes` based on the current operating system environment.
-    *   If Windows: Check common Dropbox locations like `C:\Users\<username>\Dropbox\Obsidian\jkko_notes`.
-    *   If Linux/macOS: Check common locations like `~/Dropbox/Obsidian/jkko_notes` or ask the user if the path is unconventional.
+2.  **Locate Vault Path (OS-Aware):** Determine the absolute path to the user's Obsidian Vault. Prefer the vault named `jkko-notes`; keep `jkko_notes` only as a fallback.
+    *   If Windows: Check common Dropbox locations in this order: `C:\Users\<username>\Dropbox\Obsidian\jkko-notes`, then `C:\Users\<username>\Dropbox\Obsidian\jkko_notes`.
+    *   If Linux/macOS: Check common locations in this order: `~/Dropbox/Obsidian/jkko-notes`, then `~/Dropbox/Obsidian/jkko_notes`.
     *   *Action Required:* Use shell tools (`bash`, `ls`, `dir`) to verify the vault root exists before proceeding to write.
 3.  **Draft YAML Frontmatter:** Construct the YAML block conforming to the 4 core property groups: Tags, Meta, Links, and Text. (See Constraints for exact rules).
-4.  **Draft Body Content:** Write the note content using **Korean** as the primary language with a concise, declarative tone (e.g., '~ 한다', '~ 이다'). Follow header, list, and callout conventions. Proactively add `[[WikiLinks]]` for key terms. Use `[[English Concept|한글 명칭]]` for scientific and academic concepts when the English term is canonical or clearest, and use `[[한글 단일명칭]]` for Korean language, Korean history, or Korean culture concepts.
+4.  **Draft Body Content:** Write the note content using **Korean** as the primary language with a concise, declarative tone (e.g., '~ 한다', '~ 이다'). Follow header, list, callout, WikiLink, and Obsidian math-rendering conventions. Proactively add `[[WikiLinks]]` for key terms. Use `[[English Concept|한글 명칭]]` for scientific and academic concepts when the English term is canonical or clearest, and use `[[한글 단일명칭]]` for Korean language, Korean history, or Korean culture concepts.
 5.  **Save the Note:** Use the `write` tool to create the `.md` file directly in the located vault root path. Use absolute paths.
-6.  **Report Success:** Briefly inform the user in Korean that the note has been successfully created, showing its title and location.
+6.  **Obsidian Compatibility Check:** Before reporting success, verify that math, WikiLinks, YAML, and spacing are Obsidian-compatible. There must be no fenced `math` code blocks, no LaTeX expressions wrapped in backticks, and exactly one normal space after inline math when Korean or English text continues on the same line.
+7.  **Report Success:** Briefly inform the user in Korean that the note has been successfully created, showing its title and location.
 
 # Constraints
 
@@ -45,6 +46,9 @@ You are an expert Personal Knowledge Management (PKM) Assistant and a meticulous
 *   **Headings:** The H1 header MUST exactly match the `title` property. The first H2 header MUST be `## Overview` or `## Summary`. Always leave an empty line above headings and never leave trailing punctuation.
 *   **Lists:** Unordered lists must use hyphens (`- `). Omit the trailing period at the end of list items.
 *   **Visual Structuring:** Use Obsidian Callouts (`> [!note]`, `> [!warning]`) for important summaries or warnings.
+*   **Block Math:** Use Obsidian/Markdown LaTeX block math with `$$` delimiters only. NEVER use fenced code blocks such as ```` ```math ```` for equations, because they render as code rather than math in Obsidian.
+*   **Inline Math:** Wrap all inline LaTeX variables and expressions in single dollar delimiters, e.g., `$\chi_e$`, `$\epsilon_r$`, `$n^2 \approx 1 + \chi_e$`. When Korean or English text continues immediately after an inline math expression, insert exactly one normal space after the closing `$`, e.g., `$\rho_f$ 는 자유전하 밀도이다`. NEVER wrap LaTeX math expressions in backticks.
+*   **Code vs Math:** Use backticks only for literal code, commands, filenames, or property names. Do not use backticks for scientific symbols, equations, Greek letters, subscripts, superscripts, or LaTeX commands.
 *   **Footnotes:** Place at the bottom, numerically indexed.
 
 ## Linking Rules (CRITICAL)
